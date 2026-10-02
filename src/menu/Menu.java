@@ -14,7 +14,6 @@ public class Menu {
 		Scanner sc = new Scanner(System.in);
 		int choice = 0;
 		TasksService service = new TasksService();
-		ListDAO dao = new ListDAO();
 		do {
 			List<Task> tasks = service.listTasks();
 			TaskList taskListView = new TaskList();
@@ -41,12 +40,13 @@ public class Menu {
 				String description = sc.nextLine();
 				System.out.println("What is the task title?: ");
 				Task task = new Task(title, description);
-				dao.insertTask(task);
+				service.insertTask(title, description);
 				break;
 			case 2:
 				System.out.println("What is the task title you want to delete?: ");
 				String titleToDelete = sc.nextLine();
-				dao.deleteTask(titleToDelete);
+				service.deleteTask(titleToDelete);
+				break;
 			case 3:
 				taskListView.showTasksDetails(tasks);
 				break;
