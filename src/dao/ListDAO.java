@@ -134,16 +134,16 @@ public class ListDAO {
 		}
 	}
 
-	public void modifyProgress(Progress newStatus, int id) {
+	public void modifyProgress(Progress newStatus, String titleToChangeProgress) {
 		Connection conn = null;
 		PreparedStatement preparedStatement = null;
-		String query = "UPDATE tasks SET progress = (?) WHERE id = (?);";
+		String query = "UPDATE tasks SET progress = (?) WHERE title = (?);";
 		String statusString = newStatus.toDbValue();
 		try {
 			conn = ManageConnection.openConnect();
 			preparedStatement = conn.prepareStatement(query);
 			preparedStatement.setString(1, statusString);
-			preparedStatement.setInt(2, id);
+			preparedStatement.setString(2, titleToChangeProgress);
 			preparedStatement.executeUpdate();
 			System.out.println("Task progress updated!");
 

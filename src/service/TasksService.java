@@ -33,7 +33,7 @@ public class TasksService {
 		return task;
 	}
 
-	public void modifyProgress(Progress newStatus, int id) {
-		dao.modifyProgress(newStatus, id);
+	public void modifyProgress(Progress newStatus, String titleToChangeProgress) {
+		dao.modifyProgress(newStatus, titleToChangeProgress);
 	}
 }
