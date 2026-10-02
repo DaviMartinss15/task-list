@@ -17,45 +17,44 @@ public class ListDAO {
 		Connection conn = null;
 		PreparedStatement preparedStatement = null;
 		String query = "INSERT INTO tasks (title, description, progress) VALUES (?, ?, ?);";
-		try{
+		try {
 			conn = ManageConnection.openConnect();
 			preparedStatement = conn.prepareStatement(query);
 			preparedStatement.setString(1, task.title);
 			preparedStatement.setString(2, task.description);
 			preparedStatement.setString(3, task.progress.toDbValue());
-			
+
 			preparedStatement.executeUpdate();
 			System.out.println("Task inserted!");
-			
-		}catch(SQLException e) {
+
+		} catch (SQLException e) {
 			throw new DbException("An erro are detected: " + e.getMessage());
-		}finally {
+		} finally {
 			ManageConnection.closeStatement(preparedStatement);
 			ManageConnection.closeConnection(conn);
 		}
 	}
-	
+
 	public void deleteTask(String title) {
 		Connection conn = null;
 		PreparedStatement preparedStatement = null;
 		String query = "DELETE FROM tasks WHERE title = (?);";
-		try{
+		try {
 			conn = ManageConnection.openConnect();
 			preparedStatement = conn.prepareStatement(query);
 			preparedStatement.setString(1, title);
-			
-			
+
 			preparedStatement.executeUpdate();
 			System.out.println("Task deleted!");
-			
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new DbException("An erro are detected: " + e.getMessage());
-		}finally {
+		} finally {
 			ManageConnection.closeStatement(preparedStatement);
 			ManageConnection.closeConnection(conn);
 		}
+		
 	}
-	
+
 	public List<Task> listTasks() {
 		Connection conn = null;
 		PreparedStatement preparedStatement = null;
@@ -66,45 +65,46 @@ public class ListDAO {
 			conn = ManageConnection.openConnect();
 			preparedStatement = conn.prepareStatement(query);
 			resultSet = preparedStatement.executeQuery();
-			
-			while(resultSet.next()) {
+
+			while (resultSet.next()) {
 				String title = resultSet.getString("title");
 				String description = resultSet.getString("description");
 				Progress progress = Progress.fromDbValue(resultSet.getString("progress"));
-				
-				Task task = new Task(title, description, progress);
+
+				Task task = new Task(title, description);
+				task.progress = progress;
 				taskList.add(task);
 			}
 			return taskList;
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new DbException("An erro are detected: " + e.getMessage());
-		}finally {
+		} finally {
 			ManageConnection.closeStatement(preparedStatement);
 			ManageConnection.closeResultSet(resultSet);
 			ManageConnection.closeConnection(conn);
 		}
 	}
-	
+
 	public void deleteAllTasks() {
 		Connection conn = null;
 		PreparedStatement preparedStatement = null;
 		String query = "DELETE FROM tasks;";
-		try{
+		try {
 			conn = ManageConnection.openConnect();
 			preparedStatement = conn.prepareStatement(query);
-			
+
 			preparedStatement.executeUpdate();
 			System.out.println("All Tasks are deleted!");
-			
-		}catch(SQLException e) {
+
+		} catch (SQLException e) {
 			throw new DbException("An erro are detected: " + e.getMessage());
-		}finally {
+		} finally {
 			ManageConnection.closeStatement(preparedStatement);
 			ManageConnection.closeConnection(conn);
 		}
-		
+
 	}
-	
+
 	public Task getTask(String title) {
 		Connection conn = null;
 		PreparedStatement preparedStatement = null;
@@ -116,43 +116,43 @@ public class ListDAO {
 			preparedStatement = conn.prepareStatement(query);
 			preparedStatement.setString(1, title);
 			resultSet = preparedStatement.executeQuery();
-			while(resultSet.next()) {
+			while (resultSet.next()) {
 				String title_ = resultSet.getString("title");
 				String description = resultSet.getString("description");
 				Progress progress = Progress.fromDbValue(resultSet.getString("progress"));
-				
-				task = new Task(title_, description, progress);
+
+				task = new Task(title_, description);
+				task.progress = progress;
 			}
 			return task;
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new DbException("An erro are detected: " + e.getMessage());
-		}finally {
+		} finally {
 			ManageConnection.closeStatement(preparedStatement);
 			ManageConnection.closeResultSet(resultSet);
 			ManageConnection.closeConnection(conn);
 		}
 	}
-	
+
 	public void modifyProgress(Progress newStatus, int id) {
 		Connection conn = null;
 		PreparedStatement preparedStatement = null;
 		String query = "UPDATE tasks SET progress = (?) WHERE id = (?);";
 		String statusString = newStatus.toDbValue();
-		try{
+		try {
 			conn = ManageConnection.openConnect();
 			preparedStatement = conn.prepareStatement(query);
 			preparedStatement.setString(1, statusString);
 			preparedStatement.setInt(2, id);
 			preparedStatement.executeUpdate();
-			
-			
-		}catch(SQLException e) {
+			System.out.println("Task progress updated!");
+
+		} catch (SQLException e) {
 			throw new DbException("An erro are detected: " + e.getMessage());
-		}finally {
+		} finally {
 			ManageConnection.closeStatement(preparedStatement);
 			ManageConnection.closeConnection(conn);
 		}
-		System.out.println("Task progress updated!");
+		
 	}
 }
-

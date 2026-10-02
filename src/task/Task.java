@@ -7,13 +7,12 @@ public class Task {
 	public String description;
 	public Progress progress;
 	
-	public Task(String title, String description, Progress progress) {
+	public Task(String title, String description) {
 		this.title = title;
 		this.description = description;
-		this.progress = progress;
+		this.progress = Progress.TO_DO;
 		
 	}
-	
 	public void showDetails() {
 	    System.out.println("==============================");
 	    System.out.println(" Title:    " + title);

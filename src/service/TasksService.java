@@ -9,8 +9,8 @@ import task.Enum.Progress;
 public class TasksService {
 	private ListDAO dao = new ListDAO();
 
-	public void insertTask(String title, String description, Progress progress) {
-		Task task = new Task(title, description, progress);
+	public void insertTask(String title, String description) {
+		Task task = new Task(title, description);
 		dao.insertTask(task);
 	}
 
